@@ -103,8 +103,11 @@ of the Arduino is also controlled by a JLed instance using the Arduino HAL.
 ## Dependencies
 
 When using this library with PlatformIO, the dependencies are automatically
-resolved according to [library.properties](library.properties). In the
-Arduino-IDE the dependencies must be configured manually. Make sure to add:
+resolved according to [library.properties](library.properties). Just add
+`lib_deps = JLedPCA9685-HAL` to your `platformio.ini` file.
+
+In the Arduino-IDE the dependencies must be configured manually. Make sure to
+add:
 
 * [JLed](https://github.com/jandelgado/jled)
 * [Adafruit PWM Servo Driver Library](https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library)
@@ -112,7 +115,7 @@ Arduino-IDE the dependencies must be configured manually. Make sure to add:
 in The Library Manager of the Arduino IDE, or manually run 
 
 ```shell
-$ arduino-cli lb install JLed`
+$ arduino-cli lb install JLed
 $ arduino-cli lb install "Adafruit PWM Servo Driver Library"
 ```
 
