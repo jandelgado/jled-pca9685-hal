@@ -2,7 +2,7 @@
 
 [![test build](https://github.com/jandelgado/jled-pca9685-hal/actions/workflows/test.yml/badge.svg)](https://github.com/jandelgado/jled-pca9685-hal/actions/workflows/test.yml)
 
-A hardware abstraction layer (HAL) for th
+A hardware abstraction layer (HAL) for the
 [JLed](https://github.com/jandelgado/jled) library to use PCA9685 PWM drivers
 to control LEDs over I2C.
 
