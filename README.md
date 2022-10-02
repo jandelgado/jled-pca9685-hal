@@ -24,7 +24,7 @@ individually controllable PWM channels**. Each channel has a resolution of 12
 bits, resulting in 4096 steps. All channels operate at the same fixed
 frequency, which must be in the range between 24Hz and 1526Hz.
 
-<img src=".images/pca9685.png" height=350>
+<img src=".images/pca9685.png">
 
 The board operates at 3V to 5V, which is fed through the VCC pin. The V+ pin
 is optional and is used to power servos or LEDs with up to 6V. The V+ voltage
