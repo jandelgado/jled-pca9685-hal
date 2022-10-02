@@ -116,9 +116,9 @@ add:
 in The Library Manager of the Arduino IDE, or manually run 
 
 ```shell
-$ arduino-cli lb install JLedPCA9685-HAL
-$ arduino-cli lb install JLed
-$ arduino-cli lb install "Adafruit PWM Servo Driver Library"
+$ arduino-cli lib install JLedPCA9685-HAL
+$ arduino-cli lib install JLed
+$ arduino-cli lib install "Adafruit PWM Servo Driver Library"
 ```
 
 Additionally the [Arduino Wire
