@@ -3,8 +3,9 @@
 [![test build](https://github.com/jandelgado/jled-pca9685-hal/actions/workflows/test.yml/badge.svg)](https://github.com/jandelgado/jled-pca9685-hal/actions/workflows/test.yml)
 
 A hardware abstraction layer (HAL) for the
-[JLed](https://github.com/jandelgado/jled) library to use PCA9685 PWM drivers
-to control LEDs over I2C.
+[JLed](https://github.com/jandelgado/jled) library to use [PCA9685 PWM
+drivers](https://learn.adafruit.com/16-channel-pwm-servo-driver?view=all) to
+control LEDs over I2C.
 
 <!-- vim-markdown-toc GFM -->
 
@@ -19,11 +20,10 @@ to control LEDs over I2C.
 
 ## PCA9685
 
-The [PCA9685](https://learn.adafruit.com/16-channel-pwm-servo-driver?view=all)
-is an **I2C bus** controlled LED/Servo controller **with 16 individually
-controllable PWM channels**. Each channel has a resolution of 12 bits,
-resulting in 4096 steps. All channels operate at the same fixed frequency,
-which must be in the range between 24Hz and 1526Hz.
+The PCA9685 is an **I2C bus** controlled LED/Servo controller **with 16
+individually controllable PWM channels**. Each channel has a resolution of 12
+bits, resulting in 4096 steps. All channels operate at the same fixed
+frequency, which must be in the range between 24Hz and 1526Hz.
 
 <img src=".images/pca9685.png">
 
