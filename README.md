@@ -109,12 +109,14 @@ resolved according to [library.properties](library.properties). Just add
 In the Arduino-IDE the dependencies must be configured manually. Make sure to
 add:
 
+* JLedPCA9685-HAL (this library)
 * [JLed](https://github.com/jandelgado/jled)
 * [Adafruit PWM Servo Driver Library](https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library)
 
 in The Library Manager of the Arduino IDE, or manually run 
 
 ```shell
+$ arduino-cli lb install JLedPCA9685-HAL
 $ arduino-cli lb install JLed
 $ arduino-cli lb install "Adafruit PWM Servo Driver Library"
 ```
