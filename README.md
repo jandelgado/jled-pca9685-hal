@@ -1,7 +1,11 @@
 # jled-pca9685-hal
 
-A hardware abstraction layer (HAL) for th JLed library to use PCA9685 PWM
-drivers to control LEDs over I2C.
+[![test build](https://github.com/jandelgado/jled-pca9685-hal/actions/workflows/test.yml/badge.svg)](https://github.com/jandelgado/jled-pca9685-hal/actions/workflows/test.yml)
+
+A hardware abstraction layer (HAL) for the
+[JLed](https://github.com/jandelgado/jled) library to use [PCA9685 PWM
+drivers](https://learn.adafruit.com/16-channel-pwm-servo-driver?view=all) to
+control LEDs over I2C.
 
 <!-- vim-markdown-toc GFM -->
 
@@ -21,7 +25,7 @@ individually controllable PWM channels**. Each channel has a resolution of 12
 bits, resulting in 4096 steps. All channels operate at the same fixed
 frequency, which must be in the range between 24Hz and 1526Hz.
 
-<img src=".images/pca9685.png" height=350>
+<img src=".images/pca9685.png">
 
 The board operates at 3V to 5V, which is fed through the VCC pin. The V+ pin
 is optional and is used to power servos or LEDs with up to 6V. The V+ voltage
@@ -44,14 +48,14 @@ The I2C address is by default `0x40` and can be changed by closing the `A0` to
 This library exposes two classes:
 
 * `jled::PCA9685Hal` - the Hardware Abstraction Layer for JLed for the PCA9685
-* `jled::JLedPCA9685` - JLed for the the PCA9685Hal HAL
+* `jled::JLedPCA9685` - for convenience, a JLed for the the PCA9685Hal HAL is also provided
 
 To use it, we first need to create a `TwoWire` instance for the I2C communication
 and then an instance of the `Adafruit_PWMServoDriver` class to control the 
 PCA9685:
 
 ```c++
-constexpr auto I2C_ADDRESS = 0x40;
+constexpr auto I2C_ADDRESS = 0x40;  // I2C address of the PCA9685 board
 auto i2c = TwoWire();
 auto pwm = Adafruit_PWMServoDriver(I2C_ADDRESS, i2c);
 
@@ -98,17 +102,33 @@ of the Arduino is also controlled by a JLed instance using the Arduino HAL.
 
 ## Dependencies
 
-When using this library with PlatformIO, the dependencies are automatically 
-resolved according to [library.properties](library.properties). In the Arduino-IDE
-the dependencies must be configured manually. Make sure to add:
+When using this library with PlatformIO, the dependencies are automatically
+resolved according to [library.properties](library.properties). Just add
+`lib_deps = JLedPCA9685-HAL` to your `platformio.ini` file.
 
+In the Arduino-IDE the dependencies must be configured manually. Make sure to
+add:
+
+* JLedPCA9685-HAL (this library)
 * [JLed](https://github.com/jandelgado/jled)
-* [Adafruit PWM Servo Driver library](https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library)
-* [Arduino Wire library](https://www.arduino.cc/reference/en/language/functions/communication/wire/)
+* [Adafruit PWM Servo Driver Library](https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library)
+
+in The Library Manager of the Arduino IDE, or manually run 
+
+```shell
+$ arduino-cli lib install JLedPCA9685-HAL
+$ arduino-cli lib install JLed
+$ arduino-cli lib install "Adafruit PWM Servo Driver Library"
+```
+
+Additionally the [Arduino Wire
+library](https://www.arduino.cc/reference/en/language/functions/communication/wire/)
+for the I2C communication is being used, wich is available by default in the
+Arduino Framework.
 
 ## Author
 
-(C) Copyrigh 2022 by Jan Delgado
+(C) Copyright 2022 by Jan Delgado
 
 ## License
 

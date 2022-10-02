@@ -6,7 +6,7 @@
 // 
 // Copyright 2022 by Jan Delgado. All rights reserved.
 //
-#include <jled-pca9685.h>
+#include <jled-pca9685-hal.h>
 
 constexpr auto I2C_ADDRESS = 0x40;
 auto i2c = TwoWire();
