@@ -44,14 +44,14 @@ The I2C address is by default `0x40` and can be changed by closing the `A0` to
 This library exposes two classes:
 
 * `jled::PCA9685Hal` - the Hardware Abstraction Layer for JLed for the PCA9685
-* `jled::JLedPCA9685` - JLed for the the PCA9685Hal HAL
+* `jled::JLedPCA9685` - for convenience, a JLed for the the PCA9685Hal HAL is also provided
 
 To use it, we first need to create a `TwoWire` instance for the I2C communication
 and then an instance of the `Adafruit_PWMServoDriver` class to control the 
 PCA9685:
 
 ```c++
-constexpr auto I2C_ADDRESS = 0x40;
+constexpr auto I2C_ADDRESS = 0x40;  // I2C address of the PCA9685 board
 auto i2c = TwoWire();
 auto pwm = Adafruit_PWMServoDriver(I2C_ADDRESS, i2c);
 
@@ -98,17 +98,28 @@ of the Arduino is also controlled by a JLed instance using the Arduino HAL.
 
 ## Dependencies
 
-When using this library with PlatformIO, the dependencies are automatically 
-resolved according to [library.properties](library.properties). In the Arduino-IDE
-the dependencies must be configured manually. Make sure to add:
+When using this library with PlatformIO, the dependencies are automatically
+resolved according to [library.properties](library.properties). In the
+Arduino-IDE the dependencies must be configured manually. Make sure to add:
 
 * [JLed](https://github.com/jandelgado/jled)
-* [Adafruit PWM Servo Driver library](https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library)
-* [Arduino Wire library](https://www.arduino.cc/reference/en/language/functions/communication/wire/)
+* [Adafruit PWM Servo Driver Library](https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library)
+
+in The Library Manager of the Arduino IDE, or manually run 
+
+```shell
+$ arduino-cli lb install JLed`
+$ arduino-cli lb install "Adafruit PWM Servo Driver Library"
+```
+
+Additionally the [Arduino Wire
+library](https://www.arduino.cc/reference/en/language/functions/communication/wire/)
+for the I2C communication is being used, wich is available by default in the
+Arduino Framework.
 
 ## Author
 
-(C) Copyrigh 2022 by Jan Delgado
+(C) Copyright 2022 by Jan Delgado
 
 ## License
 

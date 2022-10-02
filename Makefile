@@ -3,9 +3,6 @@
 build: phony
 	pio run
 
-ci: phony
-	pio ci --keep-build-dir --project-conf platformio.ini .
-
 clean: phony
 	pio run --target clean
 
