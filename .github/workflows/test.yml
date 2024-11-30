@@ -12,16 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: install python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
-        python-version: '3.9'
+        python-version: '3.13'
 
     - name: install tools
       run: |
-        pip install platformio==6.1.4
+        pip install platformio==6.1.16
 
     - name: build example
       run: make build
