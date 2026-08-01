@@ -3,18 +3,18 @@
 [![test build](https://github.com/jandelgado/jled-pca9685-hal/actions/workflows/test.yml/badge.svg)](https://github.com/jandelgado/jled-pca9685-hal/actions/workflows/test.yml)
 
 A hardware abstraction layer (HAL) for the
-[JLed](https://github.com/jandelgado/jled) library to use [PCA9685 PWM
+[JLed](https://github.com/jandelgado/jled) (V5) library to use [PCA9685 PWM
 drivers](https://learn.adafruit.com/16-channel-pwm-servo-driver?view=all) to
 control LEDs over I2C.
 
 <!-- vim-markdown-toc GFM -->
 
-* [PCA9685](#pca9685)
-* [How to use](#how-to-use)
-* [Demo](#demo)
-* [Dependencies](#dependencies)
-* [Author](#author)
-* [License](#license)
+- [PCA9685](#pca9685)
+- [How to use](#how-to-use)
+- [Demo](#demo)
+- [Dependencies](#dependencies)
+- [Author](#author)
+- [License](#license)
 
 <!-- vim-markdown-toc -->
 
@@ -23,7 +23,9 @@ control LEDs over I2C.
 The PCA9685 is an **I2C bus** controlled LED/Servo controller **with 16
 individually controllable PWM channels**. Each channel has a resolution of 12
 bits, resulting in 4096 steps. All channels operate at the same fixed
-frequency, which must be in the range between 24Hz and 1526Hz.
+frequency, which must be in the range between 24Hz and 1526Hz. JLed Version 5
+support high resolution effects and can use the whole 12-bit range for smooth long
+running fade effects.
 
 <img src=".images/pca9685.png">
 
@@ -45,21 +47,21 @@ The I2C address is by default `0x40` and can be changed by closing the `A0` to
 
 ## How to use
 
-This library exposes two classes:
+This library exposes three classes:
 
-* `jled::PCA9685Hal` - the Hardware Abstraction Layer for JLed for the PCA9685
-* `jled::JLedPCA9685` - for convenience, a JLed for the the PCA9685Hal HAL is also provided
+- `jled::PCA9685Hal` - the Hardware Abstraction Layer for JLed for the PCA9685
+- `jled::JLedPCA9685` and `jled::JLedPCA9685HD` - for convenience, JLed classed
+  with 8-bit and 12-bit resolution for the the PCA9685Hal HAL are also provided
 
 To use it, we first need to create a `TwoWire` instance for the I2C communication
-and then an instance of the `Adafruit_PWMServoDriver` class to control the 
+and then an instance of the `Adafruit_PWMServoDriver` class to control the
 PCA9685:
 
 ```c++
 constexpr auto I2C_ADDRESS = 0x40;  // I2C address of the PCA9685 board
-auto i2c = TwoWire();
-auto pwm = Adafruit_PWMServoDriver(I2C_ADDRESS, i2c);
+auto pwm = Adafruit_PWMServoDriver(I2C_ADDRESS, Wire);
 
-auto led = jled::JLedPCA9685(jled::PCA9685Hal(15, &pwm)).Blink(250, 750).Forever();
+auto led = jled::JLedPCA9685(15, &pwm).Blink(250, 750).Forever();
 
 void setup() {
     pwm.begin();
@@ -70,30 +72,21 @@ void loop() {
 }
 ```
 
-To simplify the construction of the `jled::JLedPCA9685` objects, the 
-[demo](examples/demo/demo.ino) uses a helper:
-
-```c++ 
-constexpr auto I2C_ADDRESS = 0x40;
-auto i2c = TwoWire();
-auto pwm = Adafruit_PWMServoDriver(I2C_ADDRESS, i2c);
-
-jled::JLedPCA9685 JLedPCA9685(jled::PCA9685Hal::PinType pin) {
-    return jled::JLedPCA9685(jled::PCA9685Hal(pin, &pwm));
-}
-```
-
-The construction then simplifies to
+`jled::JLedPCA9685` also accepts a pre-constructed `jled::PCA9685Hal`, e.g.
+for cases where a custom HAL is needed:
 
 ```c++
-auto led12 = JLedPCA9685(12).Breathe(2000).Forever();
+auto led = jled::JLedPCA9685(jled::PCA9685Hal(15, &pwm)).Blink(250, 750).Forever();
 ```
 
 ## Demo
 
-The [demo](examples/demo/demo.ino) shows how to connect some LEDs to a PCA9685
-and controls these LEDs with an Arduino Nano. Additionally, the builtin LED 
-of the Arduino is also controlled by a JLed instance using the Arduino HAL. 
+The [demo](examples/demo/demo.ino) shows how to connect multiple LEDs to a PCA9685 and controls
+these LEDs with an Arduino Nano. The example also shows a `JLedPCA9685` and `JLedPCA9685HD` with
+long running breathe effects side-by-side, which allows to observe the effect of 8-bit and 12-bit
+PWM resolution especially at the beginning and the end of the effect run. Additionally, the builtin
+LED of the Arduino is also controlled by a JLed instance using the Arduino HAL. All LEDs
+are controlled together using a `JLedRefGroup` in parallel.
 
 <p float="left">
     <img src=".images/demo_bb.png" height=350>
@@ -102,35 +95,34 @@ of the Arduino is also controlled by a JLed instance using the Arduino HAL.
 
 ## Dependencies
 
-When using this library with PlatformIO, the dependencies are automatically
-resolved according to [library.properties](library.properties). Just add
-`lib_deps = JLedPCA9685-HAL` to your `platformio.ini` file.
+### PlatformIO
 
-In the Arduino-IDE the dependencies must be configured manually. Make sure to
-add:
+When using this library with PlatformIO, the dependencies are automatically resolved according to
+[library.properties](library.properties). Just add `lib_deps = jandelgado/JLedPCA9685-HAL@^5.0.0` to your
+`platformio.ini` file.
 
-* JLedPCA9685-HAL (this library)
-* [JLed](https://github.com/jandelgado/jled)
-* [Adafruit PWM Servo Driver Library](https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library)
+### Arduino IDE
 
-in The Library Manager of the Arduino IDE, or manually run 
+In the Arduino IDE's Library Manager, add this library as a dependency:
+
+- JLedPCA9685-HAL (this library, choose latest version 5) and confirm to install dependent libs.
+
+Alternatively, you can run:
 
 ```shell
-$ arduino-cli lib install JLedPCA9685-HAL
-$ arduino-cli lib install JLed
-$ arduino-cli lib install "Adafruit PWM Servo Driver Library"
+$ arduino-cli lib install JLedPCA9685-HAL@5.0.0
+$ arduino-cli lib install JLed@5.0.0
+$ arduino-cli lib install "Adafruit PWM Servo Driver Library"@3.0.3
 ```
 
 Additionally the [Arduino Wire
-library](https://www.arduino.cc/reference/en/language/functions/communication/wire/)
-for the I2C communication is being used, wich is available by default in the
-Arduino Framework.
+library](https://www.arduino.cc/reference/en/language/functions/communication/wire/) for the I2C
+communication is being used, which is available by default in the Arduino Framework.
 
 ## Author
 
-(C) Copyright 2022 by Jan Delgado
+(C) Copyright 2022-2026 by Jan Delgado
 
 ## License
 
 MIT
-

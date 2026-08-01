@@ -1,7 +1,7 @@
 .PHONY: phony
 
 build: phony
-	pio run
+	pio run -v
 
 clean: phony
 	pio run --target clean
