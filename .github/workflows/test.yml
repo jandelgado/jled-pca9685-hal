@@ -1,27 +1,27 @@
+---
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
-
+    branches: [main]
 name: run tests
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout code
-      uses: actions/checkout@v4
-
-    - name: install python
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.13'
-
-    - name: install tools
-      run: |
-        pip install platformio==6.1.16
-
-    - name: build example
-      run: make build
+      - name: checkout code
+        uses: actions/checkout@v6
+      - name: install python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.13'
+      - name: install tools
+        run: |
+          pip install platformio==6.1.19
+      - name: build example
+        run: |-
+          for env in nanoatmega328 raspberrypi_pico esp32; do
+            echo "::group::building example $env"
+            make run ENV=$env
+            echo "::endgroup::"
+          done
