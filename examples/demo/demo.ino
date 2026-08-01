@@ -6,12 +6,13 @@
 //
 // Copyright 2022-2026 by Jan Delgado. All rights reserved.
 //
+#include <Wire.h>
 #include <jled-pca9685-hal.h>
 
-// initialize the I2C and pwm driver. I2C_ADDRESS may vary among PCA9685 boards.
+// initialize the pwm driver, using the board's default I2C bus (Wire).
+// I2C_ADDRESS may vary among PCA9685 boards.
 constexpr auto I2C_ADDRESS = 0x40;
-auto i2c = TwoWire();
-auto pwm = Adafruit_PWMServoDriver(I2C_ADDRESS, i2c);
+auto pwm = Adafruit_PWMServoDriver(I2C_ADDRESS, Wire);
 
 // led_builtin is using the platforms HAL and drives the builtin LED
 auto led_builtin = JLed(LED_BUILTIN).Blink(500, 500).Forever().LowActive();

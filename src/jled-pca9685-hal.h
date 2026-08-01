@@ -30,8 +30,6 @@ public:
   PCA9685Hal &operator=(const PCA9685Hal &rhs) {
     pin_ = rhs.pin_;
     pwm_ = rhs.pwm_;
-    // reset the dedup cache: it referred to the pin/driver we just
-    // overwrote, so it must not suppress the next analogWrite().
     last_ = 0;
     return *this;
   };
@@ -54,7 +52,8 @@ private:
 };
 
 // PCA9685 has native invert support via Adafruit_PWMServoDriver::setPin(),
-// so brightness inversion (LowActive()) is applied in hardware.
+// so brightness inversion (LowActive()) is applied there. No need to
+// use InvertableHal<> here.
 class JLedPCA9685
     : public TJLed<PCA9685Hal, JLedClockType, uint8_t, JLedPCA9685> {
   using Base = TJLed<PCA9685Hal, JLedClockType, uint8_t, JLedPCA9685>;
@@ -68,6 +67,7 @@ public:
       : Base(PCA9685Hal(pin, pwm)) {}
 };
 
+// full 12-bit resolution version
 class JLedPCA9685HD
     : public TJLed<PCA9685Hal, JLedClockType, uint16_t, JLedPCA9685HD> {
   using Base = TJLed<PCA9685Hal, JLedClockType, uint16_t, JLedPCA9685HD>;
@@ -78,4 +78,4 @@ public:
   JLedPCA9685HD(PCA9685Hal::PinType pin, Adafruit_PWMServoDriver *pwm)
       : Base(PCA9685Hal(pin, pwm)) {}
 };
-}; // namespace jled
+} // namespace jled
